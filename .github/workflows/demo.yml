@@ -1,0 +1,22 @@
+name: My demo workflow
+
+on:
+  pull_request:
+
+jobs:
+  demo-job:
+    name: My demo job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Read the contents of date.txt
+        id: date-extraction
+        run: echo "::set-output name=date::$(cat date.txt)\n"
+
+      - name: Comment the date
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: ${{ steps.date-extraction.outputs.date }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
